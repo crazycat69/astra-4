@@ -51,6 +51,8 @@
 #   error "DVB-CSA is not defined"
 #endif
 
+//#define CHECK_CK
+
 typedef struct
 {
     uint8_t ecm_type;
@@ -936,6 +938,7 @@ void on_cam_response(module_data_t *mod, void *arg, const uint8_t *data)
         if(data[2] != 16)
             break;
 
+#ifdef CHECK_CK
         const uint8_t ck1 = (data[3] + data[4] + data[5]) & 0xFF;
         if(ck1 != data[6])
             break;
@@ -943,6 +946,7 @@ void on_cam_response(module_data_t *mod, void *arg, const uint8_t *data)
         const uint8_t ck2 = (data[7] + data[8] + data[9]) & 0xFF;
         if(ck2 != data[10])
             break;
+#endif
 
         is_keys_ok = true;
     } while(0);
